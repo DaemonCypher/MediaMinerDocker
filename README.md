@@ -75,3 +75,6 @@ npm run build
 - If ports clash: change `docker-compose.yml` published ports (nginx `8080`, backend `8000`)
 - Cookies not applied: ensure volume is mounted and the UI cookie path matches (`/app/cookies/cookies.txt`)
 - Stale UI: clear browser cache or run `npm run dev` for a fresh build
+
+# Note
+This is proof of conecept project seeing how far a user can push a complete AI generated project. From the looks of it and initial testing and prototyping everything is in order. This is a localized docker container version of https://github.com/DaemonCypher/MediaMinerFrontend and https://github.com/DaemonCypher/MediaMinerBackend. This project is entirely AI generated, but is led with my UI and architecture design choices.
