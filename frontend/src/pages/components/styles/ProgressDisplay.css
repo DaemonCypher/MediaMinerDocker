@@ -1,0 +1,41 @@
+.progress-card {
+  margin-top: 16px;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.progress-header .log-title {
+  margin: 0;
+}
+
+.progress-stop-button {
+  padding: 8px 16px;
+  background: #ef4444;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background 0.15s ease-in-out;
+}
+
+.progress-stop-button:hover {
+  background: #dc2626;
+}
+
+.progress-display {
+  font-family: monospace;
+  font-size: 13px;
+  color: #e5e7eb;
+  padding: 8px;
+  background: #111827;
+  border-radius: 4px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}

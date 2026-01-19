@@ -1,0 +1,81 @@
+.joblog {
+  max-width: 1050px;
+  margin: 24px auto;
+  padding: 0 24px;
+  color: #e5e7eb;
+  background: transparent;
+}
+
+.joblog__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.joblog__heading {
+  margin: 0;
+  color: #e5e7eb;
+}
+
+.joblog__title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.joblog__meta {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.joblog__mono {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  color: #e5e7eb;
+}
+
+.joblog__actions {
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.joblog__btn {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #111827;
+  background: #ffffff;
+  color: #111827;
+  cursor: pointer;
+  transition: background 0.15s ease-in-out;
+}
+
+.joblog__btn--light:hover {
+  background: #f3f4f6;
+}
+
+
+.joblog__card {
+  margin-top: 16px;
+  border-radius: 12px;
+  border: 1px solid #233046;
+  background: #111827;
+  padding: 16px;
+  color: #e5e7eb;
+  box-shadow: 0 8px 20px #00000040;
+}
+
+.joblog__log {
+  background: #0b1224;
+  color: #d6e1ff;
+  border-radius: 12px;
+  padding: 16px;
+  overflow: auto;
+  max-height: 70vh;
+  white-space: pre-wrap;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 13px;
+  border: 1px solid #233046;
+  margin: 0;
+}

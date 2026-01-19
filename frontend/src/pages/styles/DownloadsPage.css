@@ -1,0 +1,274 @@
+.jobs-page {
+  max-width: 1050px;
+  margin: 1.5rem auto 0;
+  padding: 0 1.5rem;
+  color: #e5e7eb;
+}
+
+.empty-state-text {
+	color: #9ca3af;
+}
+
+.history-entry-header {
+	display: flex;
+	gap: 12px;
+	align-items: start;
+}
+
+.history-thumbnail {
+	width: 60px;
+	height: 45px;
+	object-fit: cover;
+	border-radius: 4px;
+}
+
+.history-content {
+	flex: 1;
+}
+
+.history-title {
+	margin: 0 0 4px 0;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.history-meta {
+	font-size: 12px;
+	color: #9ca3af;
+}
+
+.history-timestamp {
+	font-size: 11px;
+	color: #6b7280;
+	margin-top: 4px;
+}
+
+.button-redownload {
+	flex: 1;
+	padding: 8px 12px;
+	background: #10b981;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 13px;
+	font-weight: 500;
+	transition: background 0.15s ease-in-out;
+}
+
+.button-redownload:hover {
+	background: #059669;
+}
+
+.button-remove {
+	padding: 8px 12px;
+	background: #374151;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 13px;
+	transition: background 0.15s ease-in-out;
+}
+
+.button-remove:hover {
+	background: #4b5563;
+}
+
+.jobs-page__error {
+  margin-bottom: 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid #fca5a5;
+  background: #fef2f2;
+  color: #991b1b;
+  padding: 0.75rem;
+}
+
+
+.jobs-page__active {
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  border: 1px solid #1f2937;
+  background: #0f172a;
+  color: #e5e7eb;
+  padding: 0.75rem;
+}
+
+.jobs-page__mono {
+  margin-left: 0.5rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  color: #374151;
+}
+
+
+.jobs-page__grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .jobs-page__grid { grid-template-columns: 1fr 1fr; }
+}
+
+
+.jobs-card {
+  border-radius: 12px;
+  border: 1px solid #233046;
+  background: #111827;
+  padding: 1rem;
+  color: #e5e7eb;
+  box-shadow: 0 8px 20px #00000040;
+}
+
+
+.jobs-card__header {
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid #1f2937;
+  background: transparent;
+  color: #e5e7eb;
+}
+
+.jobs-card h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+
+.jobs-card label {
+  display: block;
+  font-size: 0.875rem;
+  color: #cbd5e1;
+  margin-top: 0.75rem;
+}
+
+
+.jobs-card input,
+.jobs-card select {
+  margin-top: 0.25rem;
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid #374151;
+  background: #0b1224;
+  padding: 0.5rem 0.75rem;
+  color: #e5e7eb;
+}
+
+
+.jobs-card input:focus,
+.jobs-card select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px #646cff59;
+  border-color: #646cff;
+}
+
+
+.jobs-card .checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+}
+
+
+.jobs-card button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #111827;
+  background: #1f2937;
+  color: #e5e7eb;
+  cursor: pointer;
+  transition: background 0.15s ease-in-out;
+}
+
+.jobs-card button:hover {
+  background: #111827;
+}
+.jobs-page__empty {
+  padding: 2rem;
+  text-align: center;
+  border-radius: 12px;
+  border: 1px dashed #1f2937;
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+.download-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.download-title {
+  margin: 0;
+  color: #e5e7eb;
+}
+
+.refresh-button {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #111;
+  background: #111;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s ease-in-out;
+}
+
+.refresh-button:disabled {
+  background: #444;
+  cursor: not-allowed;
+}
+
+.files-container {
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 16px;
+  background: #0f172a;
+}
+
+.empty-state {
+  color: #9ca3af;
+}
+
+.files-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.file-link {
+  text-decoration: none;
+}
+
+.file-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #233046;
+  background: #111827;
+  color: #e5e7eb;
+  transition: border-color 0.15s ease, transform 0.1s ease;
+}
+
+.file-item:hover {
+  border-color: #646cff;
+  transform: translateY(-1px);
+}
+
+.file-name {
+  font-weight: 600;
+}
+
+.file-size {
+  color: #9ca3af;
+  font-size: 12px;
+}
