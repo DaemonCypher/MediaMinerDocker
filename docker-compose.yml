@@ -1,0 +1,23 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - downloads-data:/app/downloads
+      # Optional cookies:
+      # - ./cookies:/app/cookies:ro
+    environment:
+      - DOWNLOAD_DIR=/app/downloads
+
+  frontend:
+    build:
+      context: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+
+volumes:
+  downloads-data:
