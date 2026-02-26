@@ -66,6 +66,46 @@ def network_resilience_options(retries: int = 5, fragment_retries: int = 5, time
         "continuedl": resume,
     }
 
+def http_headers_options():
+    headers: Dict[str, str] = {}
+    user_agent = os.environ.get("YTDLP_USER_AGENT")
+    referer = os.environ.get("YTDLP_REFERER")
+    if user_agent and user_agent.strip():
+        headers["User-Agent"] = user_agent.strip()
+    if referer and referer.strip():
+        headers["Referer"] = referer.strip()
+    if headers:
+        return {"http_headers": headers, "user_agent": headers.get("User-Agent")}
+    return {}
+
+def impersonation_options():
+    target = os.environ.get("YTDLP_IMPERSONATE")
+    if target and target.strip():
+        return {"impersonate": target.strip()}
+    return {}
+
+def _with_ytdlp(ydl_opts: Dict[str, Any], action: Callable[[YoutubeDL], Any]):
+    try:
+        with YoutubeDL(ydl_opts) as ydl:
+            return action(ydl)
+    except AssertionError as e:
+        if "impersonate" in ydl_opts:
+            print("[WARN] yt-dlp impersonation not supported by this version. Retrying without impersonation.")
+            ydl_opts = dict(ydl_opts)
+            ydl_opts.pop("impersonate", None)
+            with YoutubeDL(ydl_opts) as ydl:
+                return action(ydl)
+        raise
+    except Exception as e:
+        msg = str(e)
+        if "impersonate" in ydl_opts and ("Impersonate target" in msg or "impersonate" in msg.lower()):
+            print("[WARN] yt-dlp impersonation target unavailable. Retrying without impersonation.")
+            ydl_opts = dict(ydl_opts)
+            ydl_opts.pop("impersonate", None)
+            with YoutubeDL(ydl_opts) as ydl:
+                return action(ydl)
+        raise
+
 def build_video_format_selector(container: str, max_height: Optional[int], prefer_codec: Optional[str]) -> str:
     height_part = f"[height<={max_height}]" if max_height is not None else ""
 
@@ -116,6 +156,8 @@ def download_audio(
         **playlist_options(allow_playlist, playlist_items),
         **cookies_options(cookie_text),
         **network_resilience_options(),
+        **http_headers_options(),
+        **impersonation_options(),
     }
     
     # Build metadata dictionary for yt-dlp if custom metadata is provided
@@ -124,8 +166,7 @@ def download_audio(
     
     try:
         print(f"[DEBUG] Starting audio download: url={url}, custom_title={custom_title}")
-        with YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
+        _with_ytdlp(ydl_opts, lambda ydl: ydl.download([url]))
         print("[DEBUG] Audio download completed")
     except Exception as e:
         print(f"[ERROR] Audio download failed: {type(e).__name__}: {e}")
@@ -172,6 +213,8 @@ def download_video(
         **playlist_options(allow_playlist, playlist_items),
         **cookies_options(cookie_text),
         **network_resilience_options(),
+        **http_headers_options(),
+        **impersonation_options(),
     }
     
     # Build metadata dictionary for yt-dlp if custom metadata is provided
@@ -180,8 +223,7 @@ def download_video(
     
     try:
         print(f"[DEBUG] Starting video download: url={url}, custom_title={custom_title}")
-        with YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
+        _with_ytdlp(ydl_opts, lambda ydl: ydl.download([url]))
         print("[DEBUG] Video download completed")
     except Exception as e:
         print(f"[ERROR] Video download failed: {type(e).__name__}: {e}")
@@ -199,68 +241,68 @@ def get_metadata(url: str) -> Dict[str, Any]:
         "quiet": True,
         "no_warnings": True,
         "extract_flat": False,
+        **http_headers_options(),
+        **impersonation_options(),
     }
     
-    with YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(url, download=False)
-        
-        if not info:
-            raise ValueError("Could not extract metadata from URL")
-        
-        # Content Details
-        # title = info.get("title", "Unknown")
-        # description = info.get("description")
-        # view_count = info.get("view_count")
-        # like_count = info.get("like_count")
-        # comment_count = info.get("comment_count")
-        # tags = info.get("tags", [])
-        # categories = info.get("categories", [])
-        
-        # Media Technical Info
-        # width = info.get("width")
-        # height = info.get("height")
-        # fps = info.get("fps")
-        # vcodec = info.get("vcodec")
-        # acodec = info.get("acodec")
-        # abr = info.get("abr")
-        # vbr = info.get("vbr")
-        filesize = info.get("filesize")
-        # ext = info.get("ext")
-        
-        # Date & Time
-        # upload_date = info.get("upload_date")
-        # release_date = info.get("release_date")
-        # modified_date = info.get("modified_date")
-        # timestamp = info.get("timestamp")
-        
-        # Additional Metadata
-        # duration = info.get("duration")
-        # uploader = info.get("uploader") or info.get("channel")
-        # artist = info.get("artist") or info.get("creator")
-        # year = info.get("release_year") or info.get("upload_date")[:4] if info.get("upload_date") else None
-        # album = info.get("album")
-        # genre = info.get("genre")
-        # webpage_url = info.get("webpage_url")
-        # is_live = info.get("is_live")
-        # license = info.get("license")
-        # age_limit = info.get("age_limit")
-        # series = info.get("series")
-        # season_number = info.get("season_number")
-        # episode_number = info.get("episode_number")
-        # availability = info.get("availability")
-        # chapters = info.get("chapters")
-        # language = info.get("language")
-        # thumbnail = info.get("thumbnail")
-        
-        return {
-            "title": info.get("title", "Unknown"),
-            "thumbnail": info.get("thumbnail"),
-            "duration": info.get("duration"),
-            "uploader": info.get("uploader") or info.get("channel"),
-            "artist": info.get("artist") or info.get("creator"),
-            "year": info.get("release_year") or info.get("upload_date")[:4] if info.get("upload_date") else None,
-            "album": info.get("album"),
-            "genre": info.get("genre"),
-            "filesize": filesize,
+    info = _with_ytdlp(ydl_opts, lambda ydl: ydl.extract_info(url, download=False))
 
-        }
+    if not info:
+        raise ValueError("Could not extract metadata from URL")
+
+    # Content Details
+    # title = info.get("title", "Unknown")
+    # description = info.get("description")
+    # view_count = info.get("view_count")
+    # like_count = info.get("like_count")
+    # comment_count = info.get("comment_count")
+    # tags = info.get("tags", [])
+    # categories = info.get("categories", [])
+
+    # Media Technical Info
+    # width = info.get("width")
+    # height = info.get("height")
+    # fps = info.get("fps")
+    # vcodec = info.get("vcodec")
+    # acodec = info.get("acodec")
+    # abr = info.get("abr")
+    # vbr = info.get("vbr")
+    filesize = info.get("filesize")
+    # ext = info.get("ext")
+
+    # Date & Time
+    # upload_date = info.get("upload_date")
+    # release_date = info.get("release_date")
+    # modified_date = info.get("modified_date")
+    # timestamp = info.get("timestamp")
+
+    # Additional Metadata
+    # duration = info.get("duration")
+    # uploader = info.get("uploader") or info.get("channel")
+    # artist = info.get("artist") or info.get("creator")
+    # year = info.get("release_year") or info.get("upload_date")[:4] if info.get("upload_date") else None
+    # album = info.get("album")
+    # genre = info.get("genre")
+    # webpage_url = info.get("webpage_url")
+    # is_live = info.get("is_live")
+    # license = info.get("license")
+    # age_limit = info.get("age_limit")
+    # series = info.get("series")
+    # season_number = info.get("season_number")
+    # episode_number = info.get("episode_number")
+    # availability = info.get("availability")
+    # chapters = info.get("chapters")
+    # language = info.get("language")
+    # thumbnail = info.get("thumbnail")
+
+    return {
+        "title": info.get("title", "Unknown"),
+        "thumbnail": info.get("thumbnail"),
+        "duration": info.get("duration"),
+        "uploader": info.get("uploader") or info.get("channel"),
+        "artist": info.get("artist") or info.get("creator"),
+        "year": info.get("release_year") or info.get("upload_date")[:4] if info.get("upload_date") else None,
+        "album": info.get("album"),
+        "genre": info.get("genre"),
+        "filesize": filesize,
+    }

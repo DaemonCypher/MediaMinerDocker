@@ -1,6 +1,7 @@
 # MediaMiner (FastAPI + React)
 
-Fast, containerized YouTube/media downloader with live progress, history, and file browser.
+Fast, containerized media downloader with live progress, history, and file browser.
+This is a revised version of https://github.com/DaemonCypher/YotubeConverter.
 
 - **Backend:** FastAPI + yt-dlp + WebSocket progress
 - **Frontend:** React (Vite) served by nginx

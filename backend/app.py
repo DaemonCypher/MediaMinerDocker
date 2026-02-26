@@ -2,6 +2,7 @@ import os
 import uuid
 import time
 import threading
+import asyncio
 from typing import Dict, Any, Optional, List
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Query
@@ -298,7 +299,10 @@ async def ws_job(job_id: str, websocket: WebSocket):
 
     try:
         while True:
-            await websocket.receive_text()
+            try:
+                await asyncio.wait_for(websocket.receive_text(), timeout=1.0)
+            except asyncio.TimeoutError:
+                pass
             with job_lock:
                 job = jobs.get(job_id)
                 if not job:
